@@ -26,4 +26,5 @@ for my $question (@$questions) {
     };
 }
 
+binmode(STDOUT, ":utf8");
 print $json->encode( $output );
