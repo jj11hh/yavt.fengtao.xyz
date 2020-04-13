@@ -12,7 +12,7 @@
         ["Anarchist","Libertarian","Liberal","Moderate","Statist","Authoritarian","Totalitarian"],
         ["Revolutionary","Very Progressive","Progressive","Neutral","Traditional","Very Traditional","Reactionary"] 
     ],
-    "power_weights": [2, 2, 1.73, 1.73, 0],
+    "power_weights": [2, 1.738, 2, 1.738, 0],
     "ideologies": {
         "Anarcho-Communism": [100, 50, 100, 90],
         "Libertarian Communism": [100, 70, 80, 80],
