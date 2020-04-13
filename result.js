@@ -168,10 +168,10 @@ $(document).ready(function () {
         $("#btn-result-save").removeAttr("disabled");
     }
 
-    function vecDistance(vec1, vec2) {
+    function vecDistance(vec1, vec2, powers) {
         let distance = 0;
         vec1.forEach((value, index) => {
-            distance += (value - vec2[index]) ** 2;
+            distance += (value - vec2[index]) ** (powers ? powers[index] : 2);
         });
 
         return Math.sqrt(distance);
@@ -179,10 +179,14 @@ $(document).ready(function () {
 
     function findIdeology(score, ideologies) {
         let ideology = Object.keys(ideologies)[0];
-        let min_distance = vecDistance(ideologies[ideology], score);
+        let powers = new Array(model.dimensions.length).fill(2);
+        if (Array.isArray(model.power_weights)){
+            powers = model.power_weights;
+        }
 
+        let min_distance = vecDistance(ideologies[ideology], score, powers);
         for (let [key, value] of Object.entries(ideologies)) {
-            let distance = vecDistance(value, score);
+            let distance = vecDistance(value, score, powers);
             if (distance < min_distance) {
                 ideology = key;
                 min_distance = distance;
