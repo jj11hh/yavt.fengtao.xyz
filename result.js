@@ -171,7 +171,7 @@ $(document).ready(function () {
     function vecDistance(vec1, vec2, powers) {
         let distance = 0;
         vec1.forEach((value, index) => {
-            distance += (value - vec2[index]) ** (powers ? powers[index] : 2);
+            distance += Math.abs(value - vec2[index]) ** (powers ? powers[index] : 2);
         });
 
         return Math.sqrt(distance);
