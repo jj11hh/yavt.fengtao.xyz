@@ -2,6 +2,9 @@ $(document).ready(function () {
     let model;
     let score;
     let question_name = "unknown";
+    const background_color = "#EEE";
+    const indicator_color_left = "#F05";
+    const indicator_color_right = "#50F";
 
     async function initialize() {
         let url = decodeURIComponent(window.location.search.substring(1));
@@ -65,17 +68,17 @@ $(document).ready(function () {
         }
 
         let svg = SVG(document.getElementById("graph"));
-        svg.rect(width, height).x(0).y(0).fill("#EEE");
+        svg.rect(width, height).x(0).y(0).fill(background_color);
 
 
         for (let i = 0; i < model.dimensions.length; i++) {
             let y = i * Y_STEP;
             // draw progress bar
             let gradient = svg.gradient("linear", (add) => {
-                add.stop(0, "#d06");
-                add.stop((score[i] - 2) / 100, "#d06");
-                add.stop((score[i] + 2) / 100, "#0d9");
-                add.stop(1, "#0d9");
+                add.stop(0, indicator_color_left);
+                add.stop((score[i] - 2) / 100, indicator_color_left);
+                add.stop((score[i] + 2) / 100, indicator_color_right);
+                add.stop(1, indicator_color_right);
             });
             svg.rect().attr({
                 width: 400,
@@ -131,7 +134,7 @@ $(document).ready(function () {
             y: y + 60,
             fill: "black"
         }).font(font_ideology);
-        svg.text(`quiz set: ${question_name}`).attr({
+        svg.text(`Quiz Name: ${question_name}`).attr({
             x: 20,
             y: height - 80,
             fill: "black"
@@ -141,7 +144,7 @@ $(document).ready(function () {
             y: height - 60,
             fill: "black"
         }).font(font_title);
-        svg.text("yavt.fengtao.xyz").attr({
+        svg.text(window.location.hostname).attr({
             x: 20,
             y: height - 40,
             fill: "black"
