@@ -206,22 +206,13 @@ $(document).ready(function () {
     function findIdeology(score, ideologies) {
         let fixed = score.map((x) => (x - 50));
         let ideology = Object.keys(ideologies)[0];
-<<<<<<< Updated upstream
         let powers = new Array(model.dimensions.length).fill(2);
         if (Array.isArray(model.power_weights)){
             powers = model.power_weights;
         }
-=======
-        let min_distance = distanceFunc(ideologies[ideology], fixed);
->>>>>>> Stashed changes
-
         let min_distance = vecDistance(ideologies[ideology], score, powers);
         for (let [key, value] of Object.entries(ideologies)) {
-<<<<<<< Updated upstream
             let distance = vecDistance(value, score, powers);
-=======
-            let distance = distanceFunc(value, fixed);
->>>>>>> Stashed changes
             if (distance < min_distance) {
                 ideology = key;
                 min_distance = distance;
