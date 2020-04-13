@@ -33,9 +33,9 @@ $(document).ready(function () {
     }
 
     function drawGraph() {
-        const width = 600;
-        const height = 800;
         const Y_STEP = 100;
+        const width = 600;
+        const height = 300 + Y_STEP * model.dimensions.length;
         const font_l = {
             family: 'Helvetica',
             size: 24,
@@ -67,7 +67,10 @@ $(document).ready(function () {
             anchor: 'start'
         }
 
-        let svg = SVG(document.getElementById("graph"));
+        let graph = document.getElementById("graph");
+        graph.setAttribute("width", width);
+        graph.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        let svg = SVG(graph);
         svg.rect(width, height).x(0).y(0).fill(background_color);
 
 
@@ -151,7 +154,7 @@ $(document).ready(function () {
         }).font(font_title);
         svg.image("SVGS/qrcode.svg").attr({
             x: 360,
-            y: 530,
+            y: height - 270,
             width: 200,
             height: 200,
         });

@@ -9,7 +9,7 @@ my $json = JSON::PP->new->canonical(1)->pretty(1);
 my $questions = decode_json do {local $/; <>}; # read entire file
 
 my $output = {};
-$output->{"model"} = "yavt-5-axis";
+$output->{"model"} = "yavt-5-axes";
 $output->{"name"} = "NAME_TO_FILL";
 $output->{"questions"} = [];
 
