@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" name="viewport" />
     <link href="css/index.css" rel="stylesheet">
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
@@ -102,7 +102,9 @@
             const question_index = {
                 "YAVT 0.1.0": "yavt_0_1_0",
                 "YAVT 0.2.1": "yavt_0_2_1",
+                "YAVT 0.2.1-cosine": "yavt_0_2_1_cosine",
                 "8 Values": "8-values",
+                "YYAVT 0.1a": "yyavt_0_1b"
             };
             for (let [question_name, question_file] of Object.entries(question_index)){
                 select.append(`<a class='dropdown-item' href='quiz.html?question=${question_file}'>${question_name}</a>`)

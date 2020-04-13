@@ -86,7 +86,12 @@ $(document).ready(function () {  // Use closure, no globals
         }
 
         for (let key = 0; key < d; key ++ ){
-            score[key] = (score[key] + max_score[key]) / (2*max_score[key]);
+            if (max_score[key] != 0){ // no such questions match this axes
+                score[key] = (score[key] + max_score[key]) / (2*max_score[key]);
+            }
+            else {
+                score[key] = 0.5; //set to the middle value
+            }
             score[key] = Math.round(score[key] * 100);
         } 
 

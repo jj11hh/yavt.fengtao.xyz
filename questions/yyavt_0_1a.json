@@ -1,0 +1,10 @@
+{
+    "name": "yyavt-0.1a",
+    "model": "yyavt-8-axes",
+    "questions": [
+        {"text": "这是一道测试题",
+         "evaluation": [0, 0, 0, 0, 0, 0, 0, 0]},
+        {"text": "这是一道测试题",
+         "evaluation": [0, 0, 0, 0, 0, 0, 0, 0]}
+    ]
+}

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let model;
     let score;
+    let distanceFunc = vecDistance;
     let question_name = "unknown";
     const background_color = "#EEE";
     const indicator_color_left = "#F05";
@@ -17,7 +18,8 @@ $(document).ready(function () {
             }
             else if (key == "score") {
                 value.split("$").map((x) => parseInt(x)).forEach((value, index)=>{
-                    score[index] = value % 101;
+                    score[index] = value > 100 ? 100 :
+                                   value < 0 ? 0 : value; 
                 });
             }
             else if (key == "question") {
@@ -27,6 +29,10 @@ $(document).ready(function () {
 
         if (model == undefined || score == undefined) {
             console.log("failed to parse parameters");
+        }
+        
+        if (model.distance == "cosine"){
+            distanceFunc = vecCosine;
         }
 
         drawGraph();
@@ -177,16 +183,45 @@ $(document).ready(function () {
         return Math.sqrt(distance);
     }
 
+    function vecCosine(vec1, vec2) {
+        return vecDot(vec1, vec2) / (vecNorm(vec1) * vecNorm(vec2));
+    }
+
+    function vecDot(vec1, vec2) {
+        let n = 0;
+        for (let i = 0; i < vec1.length; i ++){
+            n += vec1[i] * vec2[i];
+        }
+        return n;
+    }
+
+    function vecNorm(vec) {
+        let norm = 0;
+        vec.forEach((value, index) => {
+            norm += value ** 2;
+        });
+        return Math.sqrt(norm);
+    }
+
     function findIdeology(score, ideologies) {
+        let fixed = score.map((x) => (x - 50));
         let ideology = Object.keys(ideologies)[0];
+<<<<<<< Updated upstream
         let powers = new Array(model.dimensions.length).fill(2);
         if (Array.isArray(model.power_weights)){
             powers = model.power_weights;
         }
+=======
+        let min_distance = distanceFunc(ideologies[ideology], fixed);
+>>>>>>> Stashed changes
 
         let min_distance = vecDistance(ideologies[ideology], score, powers);
         for (let [key, value] of Object.entries(ideologies)) {
+<<<<<<< Updated upstream
             let distance = vecDistance(value, score, powers);
+=======
+            let distance = distanceFunc(value, fixed);
+>>>>>>> Stashed changes
             if (distance < min_distance) {
                 ideology = key;
                 min_distance = distance;
