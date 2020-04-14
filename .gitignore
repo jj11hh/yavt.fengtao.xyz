@@ -1,5 +1,5 @@
 .idea
 .vscode
-.py[cod]
-.py
+*.py[cod]
+*.py
 __pycache__/
