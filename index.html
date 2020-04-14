@@ -23,9 +23,6 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/jj11hh/yavt.fengtao.xyz">Github</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#">About us</a>
                 </li>
             </ul>
@@ -102,9 +99,8 @@
             const question_index = {
                 "YAVT 0.1.0": "yavt_0_1_0",
                 "YAVT 0.2.1": "yavt_0_2_1",
-                "YAVT 0.2.1-cosine": "yavt_0_2_1_cosine",
                 "8 Values": "8-values",
-                "YYAVT 0.1a": "yyavt_0_1b"
+                "YYAVT 0.1a": "yyavt_0_1a"
             };
             for (let [question_name, question_file] of Object.entries(question_index)){
                 select.append(`<a class='dropdown-item' href='quiz.html?question=${question_file}'>${question_name}</a>`)

@@ -5,6 +5,9 @@ $(document).ready(function () {  // Use closure, no globals
     let model;
     let model_file;
     let quiz_name = "unknown";
+    let disable_back = false;
+    let disable_display_no = false;
+    let disable_shuffle = false;
 
     initialize();
 
@@ -28,9 +31,17 @@ $(document).ready(function () {  // Use closure, no globals
         quiz_name = questions.name;
         questions = questions.questions;
         scores = new Array(questions.length).fill(0);
-        // Shuffle Quesions
-        questions.sort(() => Math.random() - 0.5);
 
+        if (questions.core_version == "0.1"){
+            disable_shuffle = questions.display_shuffle ? true : false;
+            disable_back    = questions.display_back ? true : false;
+        }
+
+        // Shuffle Quesions
+
+        if (disable_shuffle){
+            questions.sort(() => Math.random() - 0.5);
+        }
         $("#btn-strongly-positive")
             .click(()=>{ scores[current_question] = +1.0; next_question() });
         $("#btn-positive")          
@@ -42,15 +53,17 @@ $(document).ready(function () {  // Use closure, no globals
         $("#btn-strongly-negative")
             .click(()=>{ scores[current_question] = -1.0; next_question() });
 
-        $("#btn-prev").click(()=>{ prev_question() });
 
+        if (disable_back){
+            $("#btn-prev").click(()=>{ prev_question() });
+        }
         render_question();
     }
 
     function render_question() {
         $("#question-text").html(questions[current_question].text);
         $("#question-number").html(`第 ${current_question + 1} 题 剩余 ${questions.length - current_question - 1} 题`);
-        if (current_question == 0) {
+        if (current_question == 0 || disable_back) {
             $("#btn-prev").attr("disabled", "disabled");
         } else {
             $("#btn-prev").removeAttr("disabled");
