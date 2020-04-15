@@ -94,7 +94,7 @@ $(document).ready(function () {  // Use closure, no globals
 
     function result(){
         if (core_version === undefined){
-            return resultsLegacy();
+            return resultLegacy();
         }
 
         //there's the new version of result
