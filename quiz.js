@@ -1,10 +1,12 @@
 $(document).ready(function () {  // Use closure, no globals
+    'use strict';
     let scores;
     let current_question = 0;
     let questions;
     let model;
     let model_file;
     let quiz_name = "unknown";
+    let core_version = "0.1";
     let disable_back = false;
     let disable_display_no = false;
     let disable_shuffle = false;
@@ -27,21 +29,24 @@ $(document).ready(function () {  // Use closure, no globals
         }
         model = await $.getJSON(`models/${questions.model}.json`)
             .fail(()=>console.log("failed to load model"));
+
+        core_version = questions.core_version;
         model_file = questions.model;
         quiz_name = questions.name;
+
+        if (core_version == "0.1"){
+            disable_shuffle = questions.disable_shuffle ? true : false;
+            disable_back    = questions.disable_back ? true : false;
+        }
+
         questions = questions.questions;
         scores = new Array(questions.length).fill(0);
 
-        if (questions.core_version == "0.1"){
-            disable_shuffle = questions.display_shuffle ? true : false;
-            disable_back    = questions.display_back ? true : false;
-        }
-
         // Shuffle Quesions
-
-        if (disable_shuffle){
+        if (! disable_shuffle){
             questions.sort(() => Math.random() - 0.5);
         }
+
         $("#btn-strongly-positive")
             .click(()=>{ scores[current_question] = +1.0; next_question() });
         $("#btn-positive")          
@@ -54,7 +59,7 @@ $(document).ready(function () {  // Use closure, no globals
             .click(()=>{ scores[current_question] = -1.0; next_question() });
 
 
-        if (disable_back){
+        if (!disable_back){
             $("#btn-prev").click(()=>{ prev_question() });
         }
         render_question();
@@ -75,7 +80,7 @@ $(document).ready(function () {  // Use closure, no globals
             current_question++;
             render_question();
         } else {
-            results();
+            result();
         }
     }
 
@@ -87,20 +92,71 @@ $(document).ready(function () {  // Use closure, no globals
 
     }
 
-    function results() {
+    function result(){
+        if (core_version === undefined){
+            return resultsLegacy();
+        }
+
+        //there's the new version of result
+
+        const d = model.dimensions.length;
+        let max_left  = new Array(d).fill(0);
+        let max_right = new Array(d).fill(0);
+        let results   = new Array(d).fill(0);
+
+        for (let qn = 0; qn < questions.length; qn ++) {
+            let q = questions[qn];
+            for (let i = 0; i < d; i ++){
+                results[i] += q.evaluation[i] * scores[qn] + q.offset[i];
+            }
+        }
+
+        for (let i = 0; i < d; i ++) {
+            for (let q of questions) {
+                let pos_sel = q.evaluation[i] + q.offset[i];
+                let neg_sel = - q.evaluation[i] + q.offset[i];
+
+                if (pos_sel > neg_sel){
+                    max_left[i]  += pos_sel;
+                    max_right[i] += neg_sel;
+                }
+                else {
+                    max_right[i] += pos_sel;
+                    max_left[i]  += neg_sel;
+                }
+            }
+
+            if (results[i] > 0){
+                results[i] = (results[i] / max_left[i]) * 50 + 50;
+            }
+            else {
+                results[i] = -(results[i] / max_right[i]) * 50 + 50;
+            }
+        }
+        results = results.map(Math.round);
+
+        let request = {
+            model: model_file,
+            score: results.join("$"),
+            question: quiz_name
+        };
+        location.href = "result.html?" + $.param(request); 
+    }
+
+    function resultLegacy() {
         const d = model.dimensions.length;
         let score = new Array(d).fill(0);
         let max_score = [...score];
         for (let i = 0; i < scores.length; i ++ ) {
             for (let key = 0; key < d; key ++){
                 score[key] += scores[i] * questions[i].evaluation[key];
-                max_score[key] += Math.abs(questions[i].evaluation[key]);
+                max_score[key] += Math.abs(questions[i].evaluation[key] * 2);
             }
         }
 
         for (let key = 0; key < d; key ++ ){
             if (max_score[key] != 0){ // no such questions match this axes
-                score[key] = (score[key] + max_score[key]) / (2*max_score[key]);
+                score[key] = ( score[key] + max_score[key]/2 ) / (max_score[key]);
             }
             else {
                 score[key] = 0.5; //set to the middle value
